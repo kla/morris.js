@@ -54,6 +54,9 @@ class Morris.Line extends Morris.Grid
     hideHover: false
     xLabels: 'auto'
     xLabelFormat: null
+    normalRange: []
+    normalRangeFillColor: '#00f'
+    normalRangeOpacity: 0.1
 
   # Do any size-related calculations
   #
@@ -95,8 +98,18 @@ class Morris.Line extends Morris.Grid
   draw: ->
     @drawXAxis()
     @drawSeries()
+    @drawNormalRange()
     @drawHover()
     @hilight(if @options.hideHover then null else @data.length - 1)
+
+  drawNormalRange: ->
+    if @options.normalRange.length == 2
+      y = @transY(@options.normalRange[1])
+      height = @transY(@options.normalRange[0]) - y
+      @r.rect(@left, y, @width, height)
+        .attr('fill', @options.normalRangeFillColor)
+        .attr('opacity', @options.normalRangeOpacity)
+        .attr('stroke', 0)
 
   # draw the x-axis labels
   #

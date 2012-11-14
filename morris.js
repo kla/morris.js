@@ -484,7 +484,10 @@
       smooth: true,
       hideHover: false,
       xLabels: 'auto',
-      xLabelFormat: null
+      xLabelFormat: null,
+      normalRange: [],
+      normalRangeFillColor: '#00f',
+      normalRangeOpacity: 0.1
     };
 
     Line.prototype.calc = function() {
@@ -567,8 +570,18 @@
     Line.prototype.draw = function() {
       this.drawXAxis();
       this.drawSeries();
+      this.drawNormalRange();
       this.drawHover();
       return this.hilight(this.options.hideHover ? null : this.data.length - 1);
+    };
+
+    Line.prototype.drawNormalRange = function() {
+      var height, y;
+      if (this.options.normalRange.length === 2) {
+        y = this.transY(this.options.normalRange[1]);
+        height = this.transY(this.options.normalRange[0]) - y;
+        return this.r.rect(this.left, y, this.width, height).attr('fill', this.options.normalRangeFillColor).attr('opacity', this.options.normalRangeOpacity).attr('stroke', 0);
+      }
     };
 
     Line.prototype.drawXAxis = function() {
